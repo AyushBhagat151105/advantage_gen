@@ -1,4 +1,6 @@
 export const config = {
     PORT: Bun.env.PORT || 3000,
     DATABASE_URL: Bun.env.DATABASE_URL,
+    HUGGINGFACE_KEY: Bun.env.HUGGINGFACE_KEY,
+    OPENROUTER_KEY: Bun.env.OPENROUTER_KEY
 }
