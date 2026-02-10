@@ -6,6 +6,7 @@ import { generateOpenAPIDocument } from "./config/openapi";
 import { apiReference } from "@scalar/express-api-reference";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
+import { generateRouter } from "./router/generate";
 
 const app = express();
 const port = config.PORT;
@@ -28,6 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/v1/openapi.json", (req: Request, res: Response) => {
     res.json(generateOpenAPIDocument());
 });
+
+app.use("/api/generate", generateRouter)
 
 app.use(
     "/docs",
