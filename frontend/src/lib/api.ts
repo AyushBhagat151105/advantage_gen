@@ -5,18 +5,10 @@ const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
 export const apiClient = axios.create({
     baseURL: BASE_URL,
+    withCredentials: true, // Important: sends auth cookies cross-domain
     headers: {
         'Content-Type': 'application/json',
     },
-})
-
-// Attach auth token to every request
-apiClient.interceptors.request.use(async (config) => {
-    const { data: session } = await authClient.getSession()
-    if (session?.session?.token) {
-        config.headers['Authorization'] = `Bearer ${session.session.token}`
-    }
-    return config
 })
 
 // ─── Types ──────────────────────────────────────────────────────────────────

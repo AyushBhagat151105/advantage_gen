@@ -33,10 +33,11 @@ const GenerateImageResponseSchema = registry.register(
         message: z.string(),
         data: z.object({
             image: z.object({
-                filePath: z.string(),
-                fileName: z.string(),
+                id: z.string(),
+                url: z.string(),
                 prompt: z.string(),
                 model: z.string(),
+                createdAt: z.string().openapi({ format: "date-time" }),
             }),
         }).optional(),
         timestamp: z.string(),
@@ -83,6 +84,57 @@ registry.registerPath({
             content: {
                 "application/json": {
                     schema: ErrorResponseSchema,
+                },
+            },
+        },
+        500: {
+            description: "Internal Server Error",
+            content: {
+                "application/json": {
+                    schema: ErrorResponseSchema,
+                },
+            },
+        },
+    },
+});
+
+const GenerationSchema = registry.register(
+    "Generation",
+    z.object({
+        id: z.string(),
+        prompt: z.string(),
+        imageUrl: z.string(),
+        model: z.string(),
+        userId: z.string(),
+        createdAt: z.string().openapi({ format: "date-time" }),
+    }).openapi("Generation")
+);
+
+const GenerationHistoryResponseSchema = registry.register(
+    "GenerationHistoryResponse",
+    z.object({
+        success: z.boolean(),
+        statusCode: z.number(),
+        message: z.string(),
+        data: z.object({
+            generations: z.array(GenerationSchema),
+        }),
+        timestamp: z.string(),
+    }).openapi("GenerationHistoryResponse")
+);
+
+registry.registerPath({
+    method: "get",
+    path: "/api/generate/history",
+    summary: "Get Generation History",
+    description: "Fetch all past image generations for the authenticated user natively from the database.",
+    tags: ["Generate"],
+    responses: {
+        200: {
+            description: "History fetched successfully",
+            content: {
+                "application/json": {
+                    schema: GenerationHistoryResponseSchema,
                 },
             },
         },

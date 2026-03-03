@@ -1,16 +1,10 @@
 import type { Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import type { AuthenticatedRequest } from "../middleware/auth";
-import { ApiResponse } from "../utils/apiRespons";
-import { openRouter } from "../config/openrouter";
-import fs from "fs";
-import path from "path";
-
-// Ensure temp directory exists
-const tempDir = path.resolve(__dirname, "../../temp");
-if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir, { recursive: true });
-}
+import { ApiResponse } from "../utils/apiRespons"; // NOTE: Original file calls it apiRespons
+import { prisma } from "../lib/prisma";
+import { client } from "../config/huggingface";
+import { uploadBufferToCloudinary } from "../utils/cloudinary";
 
 export const generateImage = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
     const { prompt = "Create a complete advertising caption and poster-style description for a new footwear brand called StepUp The output should include: A main headline (short, bold, motivating) A sub-headline that highlights comfort, durability, and premium performance A short body text that positions StepUp as a modern, stylish, high-quality shoe brand made for everyday wear and athletes A strong call-to-action Ensure the tone is energetic, inspirational, and suitable for social media ads, print posters, and brand campaigns." } = req.body || {};
@@ -21,57 +15,65 @@ export const generateImage = asyncHandler(async (req: AuthenticatedRequest, res:
         );
     }
 
-    // Generate image using OpenRouter with image modality
-    const result = await openRouter.chat.send({
-        chatGenerationParams: {
-            model: "sourceful/riverflow-v2-pro",
-            messages: [
-                {
-                    role: "user",
-                    content: prompt,
-                },
-            ],
-            modalities: ["image"],
-            stream: false,
-        },
+    // Generate image using Hugging Face Text-To-Image
+    const result = await client.textToImage({
+        model: "black-forest-labs/FLUX.1-schnell",
+        inputs: prompt,
+        provider: "hf-inference",
     });
+    console.log(result);
 
-    // Extract the base64 image from the response
-    const choices = (result as any)?.choices;
-    const imageUrl = choices?.[0]?.message?.images?.[0]?.imageUrl?.url as string | undefined;
+    // result is a Blob. Convert to Buffer
+    const arrayBuffer = await (result as any).arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    if (!imageUrl || !imageUrl.startsWith("data:image/")) {
+    let secureUrl;
+    try {
+        const uploadResult = await uploadBufferToCloudinary(buffer, "advantage_gen_generations");
+        secureUrl = uploadResult.secure_url;
+    } catch (error: any) {
+        console.error("Cloudinary upload failure details:", JSON.stringify(error, null, 2));
         return res.status(500).json(
-            new ApiResponse(500, "Failed to extract image from API response")
+            new ApiResponse(500, "Failed to upload generated image to Cloudinary", {
+                error: (error?.message) || JSON.stringify(error) || String(error)
+            })
         );
     }
 
-    // Parse the base64 data — format: "data:image/png;base64,<data>"
-    const matches = imageUrl.match(/^data:image\/(\w+);base64,(.+)$/);
-    if (!matches) {
-        return res.status(500).json(
-            new ApiResponse(500, "Invalid base64 image format")
-        );
-    }
-
-    const ext = matches[1]!; // e.g. "png"
-    const base64Data = matches[2]!;
-    const fileName = `generated_${Date.now()}.${ext}`;
-    const filePath = path.join(tempDir, fileName);
-
-    // Write the image to the temp folder
-    fs.writeFileSync(filePath, Buffer.from(base64Data, "base64"));
+    // Save history in database
+    const generation = await prisma.generation.create({
+        data: {
+            prompt,
+            imageUrl: secureUrl,
+            model: "black-forest-labs/FLUX.1-schnell",
+            userId: req.session.user.id
+        }
+    });
 
     const responseData = {
         image: {
-            filePath,
-            fileName,
+            id: generation.id,
+            url: generation.imageUrl,
             prompt,
-            model: "sourceful/riverflow-v2-pro",
+            model: generation.model,
+            createdAt: generation.createdAt
         },
     };
 
     return res.status(200).json(
         new ApiResponse(200, "Image generated and saved successfully", responseData)
+    );
+});
+
+export const getGenerationHistory = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+    const userId = req.session.user.id;
+
+    const generations = await prisma.generation.findMany({
+        where: { userId },
+        orderBy: { createdAt: 'desc' },
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, "History fetched successfully", { generations })
     );
 });

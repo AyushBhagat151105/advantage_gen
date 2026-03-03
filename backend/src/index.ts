@@ -7,6 +7,7 @@ import { apiReference } from "@scalar/express-api-reference";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import { generateRouter } from "./router/generate";
+import path from "path";
 
 const app = express();
 const port = config.PORT;
@@ -32,6 +33,7 @@ app.get("/v1/openapi.json", (req: Request, res: Response) => {
 });
 
 app.use("/api/generate", generateRouter)
+app.use("/api/generate/temp", express.static(path.resolve(process.cwd(), "temp")));
 
 app.use(
     "/docs",

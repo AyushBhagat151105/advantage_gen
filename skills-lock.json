@@ -11,6 +11,11 @@
       "sourceType": "github",
       "computedHash": "063a0e6448123cd359ad0044cc46b0e490cc7964d45ef4bb9fd842bd2ffbca67"
     },
+    "javascript-sdk": {
+      "source": "inference-sh-9/skills",
+      "sourceType": "github",
+      "computedHash": "7dae6c21fddab044c29b05765f9a9bb6218efc05caa481d54ac16679049fd300"
+    },
     "shadcn-ui": {
       "source": "giuseppe-trisciuoglio/developer-kit",
       "sourceType": "github",
