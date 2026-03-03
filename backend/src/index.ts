@@ -11,11 +11,10 @@ import { generateRouter } from "./router/generate";
 const app = express();
 const port = config.PORT;
 
-app.all("/api/auth/*splat", toNodeHandler(auth));
-
+// CORS must be first — before Better Auth handler — so preflight works
 app.use(
     cors({
-        origin: "*",
+        origin: "http://localhost:3001",
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         allowedHeaders: "Content-Type,Authorization",
         credentials: true,
@@ -23,6 +22,8 @@ app.use(
 );
 
 app.use(express.json());
+
+app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.urlencoded({ extended: true }));
 
 
