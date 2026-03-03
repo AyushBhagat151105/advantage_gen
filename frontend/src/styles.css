@@ -345,3 +345,13 @@ a {
     color: var(--foreground);
   }
 }
+
+.bg-\[var\(--lagoon-deep\)\] {
+  --tw-bg-opacity: 1;
+  background-color: var(--lagoon-deep);
+}
+
+.text-\[var\(--sea-ink\)\] {
+  --tw-text-opacity: 1;
+  color: var(--sea-ink);
+}

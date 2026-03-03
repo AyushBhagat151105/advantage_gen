@@ -45,9 +45,9 @@ function GeneratePage() {
   }
 
   const handleDownload = () => {
-    if (!result?.image?.filePath) return
+    if (!result?.image?.url) return
     const link = document.createElement('a')
-    link.href = result.image.filePath
+    link.href = result.image.url
     link.download = result.image.fileName ?? 'generated-image.png'
     link.click()
   }
@@ -57,13 +57,13 @@ function GeneratePage() {
       {/* Header */}
       <section className="rise-in mb-10 text-center">
         <span className="island-kicker mb-4 inline-block">AI Studio</span>
-        <h1 className="display-title mb-4 text-4xl font-bold text-[var(--sea-ink)] sm:text-5xl">
+        <h1 className="display-title mb-4 text-4xl font-bold text-(--) sm:text-5xl">
           Generate your{' '}
           <span className="bg-[linear-gradient(135deg,var(--lagoon),var(--palm))] bg-clip-text text-transparent">
             ad creative
           </span>
         </h1>
-        <p className="mx-auto max-w-lg text-base text-[var(--sea-ink-soft)]">
+        <p className="mx-auto max-w-lg text-base text-(--)">
           Describe your brand, product, or campaign — our AI will craft a
           professional advertising poster for you.
         </p>
@@ -78,7 +78,7 @@ function GeneratePage() {
         >
           <label
             htmlFor="prompt"
-            className="mb-2 block text-sm font-semibold text-[var(--sea-ink)]"
+            className="mb-2 block text-sm font-semibold text-(--)"
           >
             Describe your campaign
           </label>
@@ -89,25 +89,25 @@ function GeneratePage() {
             onChange={(e) => setPrompt(e.target.value)}
             disabled={mutation.isPending}
             placeholder={`e.g. "Create a complete advertising caption and poster-style description for a new footwear brand called StepUp"`}
-            className="w-full resize-none rounded-xl border border-[var(--line)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--sea-ink)] placeholder:text-[var(--sea-ink-soft)] focus:border-[var(--lagoon-deep)] focus:outline-none focus:ring-2 focus:ring-[rgba(50,143,151,0.2)] transition disabled:opacity-60"
+            className="w-full resize-none rounded-xl border border-(--) bg-(--) px-4 py-3 text-sm text-(--) placeholder:text-(--) focus:border-(--) focus:outline-none focus:ring-2 focus:ring-[rgba(50,143,151,0.2)] transition disabled:opacity-60"
           />
           <div className="mt-4 flex items-center justify-between gap-4">
-            <p className="text-xs text-[var(--sea-ink-soft)]">
+            <p className="text-xs text-(--)">
               {prompt.length} / 1000 characters
             </p>
             <button
               type="submit"
               disabled={mutation.isPending || !prompt.trim()}
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--lagoon-deep)] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[rgba(50,143,151,0.3)] transition hover:scale-105 hover:shadow-xl hover:shadow-[rgba(50,143,151,0.4)] active:scale-100 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+              className="inline-flex items-center gap-2 rounded-full text-black dark:text-white bg-(--) px-6 py-2.5 text-sm font-semibol shadow-lg shadow-[rgba(50,143,151,0.3)] transition hover:scale-105 hover:shadow-xl hover:shadow-[rgba(50,143,151,0.4)] active:scale-100 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
             >
               {mutation.isPending ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin text-black dark:text-white" />
                   Generating…
                 </>
               ) : (
                 <>
-                  <Wand2 className="h-4 w-4" />
+                  <Wand2 className="h-4 w-4 text-black dark:text-white" />
                   Generate
                 </>
               )}
@@ -119,12 +119,12 @@ function GeneratePage() {
         {mutation.isPending && (
           <div className="island-shell rise-in flex flex-col items-center justify-center gap-4 rounded-2xl p-16 text-center">
             <div className="relative">
-              <div className="h-14 w-14 rounded-full border-4 border-[var(--line)] border-t-[var(--lagoon-deep)] animate-spin" />
-              <Sparkles className="absolute inset-0 m-auto h-5 w-5 text-[var(--lagoon-deep)]" />
+              <div className="h-14 w-14 rounded-full border-4 border-(--) border-t-(--) animate-spin" />
+              <Sparkles className="absolute inset-0 m-auto h-5 w-5 text-(--)" />
             </div>
             <div>
-              <p className="font-semibold text-[var(--sea-ink)]">Crafting your creative…</p>
-              <p className="mt-1 text-sm text-[var(--sea-ink-soft)]">
+              <p className="font-semibold text-(--)">Crafting your creative…</p>
+              <p className="mt-1 text-sm text-(--)">
                 This usually takes 15–30 seconds
               </p>
             </div>
@@ -135,13 +135,13 @@ function GeneratePage() {
         {mutation.isError && !mutation.isPending && (
           <div className="island-shell rise-in flex flex-col items-center gap-3 rounded-2xl border-red-200/60 p-10 text-center">
             <ImageOff className="h-10 w-10 text-red-400" />
-            <p className="font-semibold text-[var(--sea-ink)]">Generation failed</p>
-            <p className="text-sm text-[var(--sea-ink-soft)]">
+            <p className="font-semibold text-(--)">Generation failed</p>
+            <p className="text-sm text-(--)">
               {(mutation.error as Error)?.message ?? 'An unexpected error occurred.'}
             </p>
             <button
               onClick={() => mutation.mutate()}
-              className="mt-2 rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-5 py-2 text-sm font-medium text-[var(--sea-ink)] transition hover:bg-[var(--link-bg-hover)]"
+              className="mt-2 rounded-full border border-(--) bg-(--) px-5 py-2 text-sm font-medium text-(--) transition hover:bg-(--)"
             >
               Try again
             </button>
@@ -152,13 +152,13 @@ function GeneratePage() {
         {result && !mutation.isPending && (
           <div className="island-shell rise-in rounded-2xl overflow-hidden">
             {/* Image */}
-            <div className="relative bg-[var(--sand)] aspect-[4/3] w-full overflow-hidden">
+            <div className="relative w-full bg-(--) flex items-center justify-center p-4 rounded-xl overflow-hidden">
               <img
-                src={result.image.filePath}
+                src={result.image.url}
                 alt={result.image.prompt}
-                className="h-full w-full object-cover"
+                className="max-h-[600px] w-full object-contain"
                 onError={(e) => {
-                  ; (e.currentTarget as HTMLImageElement).style.display = 'none'
+                  e.currentTarget.style.display = 'none'
                 }}
               />
             </div>
@@ -166,20 +166,20 @@ function GeneratePage() {
             {/* Metadata + actions */}
             <div className="p-6">
               <div className="mb-4 flex flex-wrap gap-2">
-                <span className="inline-flex items-center gap-1 rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-3 py-1 text-xs font-medium text-[var(--sea-ink-soft)]">
+                <span className="inline-flex items-center gap-1 rounded-full border border-(--) bg-(--) px-3 py-1 text-xs font-medium text-(--)">
                   Model: {result.image.model}
                 </span>
-                <span className="inline-flex items-center gap-1 rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-3 py-1 text-xs font-medium text-[var(--sea-ink-soft)]">
+                <span className="inline-flex items-center gap-1 rounded-full border border-(--) bg-(--) px-3 py-1 text-xs font-medium text-(--)">
                   {result.image.fileName}
                 </span>
               </div>
-              <p className="mb-5 text-sm text-[var(--sea-ink-soft)] leading-relaxed line-clamp-3">
+              <p className="mb-5 text-sm text-(--) leading-relaxed line-clamp-3">
                 {result.image.prompt}
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={handleDownload}
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--lagoon-deep)] px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:scale-105 hover:shadow-lg active:scale-100"
+                  className="inline-flex items-center gap-2 rounded-full bg-(--) px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:scale-105 hover:shadow-lg active:scale-100"
                 >
                   <Download className="h-4 w-4" />
                   Download
@@ -189,7 +189,7 @@ function GeneratePage() {
                     setResult(null)
                     setPrompt('')
                   }}
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--sea-ink)] transition hover:bg-[var(--link-bg-hover)]"
+                  className="inline-flex items-center gap-2 rounded-full border border-(--) bg-(--) px-5 py-2.5 text-sm font-semibold text-(--) transition hover:bg-(--)"
                 >
                   <Wand2 className="h-4 w-4" />
                   New creative

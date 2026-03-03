@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { authClient } from './auth-client'
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
@@ -19,7 +18,7 @@ export interface GenerateImageRequest {
 
 export interface GenerateImageData {
     image: {
-        filePath: string
+        url: string
         fileName: string
         prompt: string
         model: string

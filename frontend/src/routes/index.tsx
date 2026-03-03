@@ -33,7 +33,7 @@ function HomePage() {
       <section className="rise-in pt-20 pb-16 text-center">
         <span className="island-kicker mb-6 inline-block">AI Advertising Studio</span>
         <h1
-          className="display-title mb-6 text-5xl font-bold leading-tight tracking-tight text-[var(--sea-ink)] sm:text-6xl lg:text-7xl"
+          className="display-title mb-6 text-5xl font-bold leading-tight tracking-tight text-(--sea-ink) sm:text-6xl lg:text-7xl"
         >
           Generate stunning{' '}
           <span
@@ -43,23 +43,28 @@ function HomePage() {
           </span>
           <br />in seconds
         </h1>
-        <p className="mx-auto mb-10 max-w-xl text-lg text-[var(--sea-ink-soft)]">
+        <p className="mx-auto mb-10 max-w-xl text-lg text-(--sea-ink-soft)">
           Describe your brand and campaign. Our AI generates professional advertising posters
           and captions ready for launch — no design skills needed.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
             to="/generate"
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--lagoon-deep)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[rgba(50,143,151,0.3)] transition hover:scale-105 hover:shadow-xl hover:shadow-[rgba(50,143,151,0.4)] active:scale-100 no-underline"
+            className="inline-flex items-center gap-2 rounded-full 
+             bg-(--) text-(--) 
+             px-6 py-3 text-sm font-semibold 
+             shadow-lg shadow-[rgba(50,143,151,0.3)] 
+             transition hover:scale-105 hover:shadow-xl active:scale-100"
           >
-            <Wand2 className="h-4 w-4" />
+            <Wand2 className="h-4 w-4 text-(--)" />
             Start Generating
           </Link>
+
           <a
             href="http://localhost:3000/docs"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-6 py-3 text-sm font-semibold text-[var(--sea-ink)] transition hover:bg-[var(--link-bg-hover)] no-underline"
+            className="inline-flex items-center gap-2 rounded-full border border-(--chip-line) bg-(--chip-bg) px-6 py-3 text-sm font-semibold text-(--sea-ink) transition hover:bg-(--link-bg-hover) no-underline"
           >
             View API Docs
           </a>
@@ -72,13 +77,13 @@ function HomePage() {
           {features.map(({ icon: Icon, title, description }) => (
             <div
               key={title}
-              className="feature-card island-shell rounded-2xl border border-[var(--line)] p-6 transition"
+              className="feature-card island-shell rounded-2xl border border-(--line) p-6 transition"
             >
-              <div className="mb-3 inline-flex items-center justify-center rounded-xl border border-[var(--chip-line)] bg-[var(--chip-bg)] p-2.5">
-                <Icon className="h-5 w-5 text-[var(--lagoon-deep)]" />
+              <div className="mb-3 inline-flex items-center justify-center rounded-xl border border-(--chip-line) bg-(--chip-bg) p-2.5">
+                <Icon className="h-5 w-5 text-(--lagoon-deep)" />
               </div>
-              <h3 className="mb-1.5 text-base font-semibold text-[var(--sea-ink)]">{title}</h3>
-              <p className="text-sm leading-relaxed text-[var(--sea-ink-soft)]">{description}</p>
+              <h3 className="mb-1.5 text-base font-semibold text-(--sea-ink)">{title}</h3>
+              <p className="text-sm leading-relaxed text-(--sea-ink-soft)">{description}</p>
             </div>
           ))}
         </div>
